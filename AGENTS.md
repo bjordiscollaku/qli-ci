@@ -191,6 +191,12 @@ When changing the Debusine reusable workflow contracts, also update
 and `tools/repo-management/debug_branch_mod.py`, then resync managed `pkg-*`
 repos with `tools/repo-management/update-workflow-files`.
 
+`update-workflow-files` deploys every `pkg-workflows/*` stub (Debusine,
+`qli-ci/` and `debian/`) to managed `pkg-*` branches and removes obsolete
+ones. When adding, renaming or removing a stub, update
+`tools/repo-management/SPECIFICATION.md` and the file lists in
+`update-workflow-files` together.
+
 ## Do Not Reintroduce
 
 The following historical artifacts were intentionally removed from shared
