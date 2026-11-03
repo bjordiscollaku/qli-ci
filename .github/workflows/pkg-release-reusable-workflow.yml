@@ -519,7 +519,7 @@ jobs:
           echo "workflow_url=$WORKFLOW_URL" >> "$GITHUB_OUTPUT"
 
       - name: Upload to apt artifactory
-        uses: qualcomm-linux/apt-artifactory-action/upload@a75d47e9e3780fd5d643a4511586bf85ea4bf07d # main
+        uses: qualcomm-linux/apt-artifactory-action/upload@d05e3849ac2e34dd6f8bef58a73d77cd5032b01f # main
         with:
           qsc_api_key: ${{ secrets.QSC_API_KEY }}
           server_url: https://qartifactory.pe.jfrog.io
