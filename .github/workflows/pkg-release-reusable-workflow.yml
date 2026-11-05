@@ -162,8 +162,8 @@ jobs:
       - name: Install packaging tools
         run: |
           set -euxo pipefail
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends devscripts dpkg-dev
+          sudo apt-get -o DPkg::Lock::Timeout=300 update
+          sudo apt-get -o DPkg::Lock::Timeout=300 install -y --no-install-recommends devscripts dpkg-dev
 
       - name: Checkout Packaging Repo
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -429,8 +429,8 @@ jobs:
       - name: Install release tools
         run: |
           set -euxo pipefail
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends devscripts jq
+          sudo apt-get -o DPkg::Lock::Timeout=300 update
+          sudo apt-get -o DPkg::Lock::Timeout=300 install -y --no-install-recommends devscripts jq
 
       - name: Download prepared source repository
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -519,7 +519,7 @@ jobs:
           echo "workflow_url=$WORKFLOW_URL" >> "$GITHUB_OUTPUT"
 
       - name: Upload to apt artifactory
-        uses: qualcomm-linux/apt-artifactory-action/upload@d05e3849ac2e34dd6f8bef58a73d77cd5032b01f # main
+        uses: qualcomm-linux/apt-artifactory-action/upload@5f61df1277c1c1295148174087b01bfae4092ad9 # main
         with:
           qsc_api_key: ${{ secrets.QSC_API_KEY }}
           server_url: https://qartifactory.pe.jfrog.io
@@ -900,8 +900,8 @@ jobs:
       - name: Install jq
         run: |
           set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends jq
+          sudo apt-get -o DPkg::Lock::Timeout=300 update
+          sudo apt-get -o DPkg::Lock::Timeout=300 install -y --no-install-recommends jq
 
       - name: Post release check run
         if: ${{ always() }}
