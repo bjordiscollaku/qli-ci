@@ -522,8 +522,8 @@ jobs:
         run: |
           set -euo pipefail
           if ! command -v aarch64-linux-gnu-gcc >/dev/null 2>&1; then
-            sudo apt-get update
-            sudo apt-get install --yes gcc-aarch64-linux-gnu
+            sudo apt-get -o DPkg::Lock::Timeout=300 update
+            sudo apt-get -o DPkg::Lock::Timeout=300 install --yes gcc-aarch64-linux-gnu
           fi
 
       - name: Prebuilt seed fixture artifacts
