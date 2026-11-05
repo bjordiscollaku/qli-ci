@@ -1,6 +1,7 @@
 pkg-adreno
 pkg-alsa-ucm-conf
 pkg-android-platform-tools
+pkg-ath11k-fwtest
 pkg-audioreach-audio-utils
 pkg-audioreach-conf
 pkg-audioreach-dkms
