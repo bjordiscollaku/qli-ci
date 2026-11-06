@@ -51,29 +51,29 @@ DEBIAN_PACKAGING_BRANCH_ALLOWLIST = [
 # Managed Ubuntu packaging branches: qcom/ubuntu/<codename>
 UBUNTU_PACKAGING_BRANCH_PATTERN = re.compile(r"qcom/ubuntu/[^/]+")
 
-# Expected files are paths relative to WORKFLOW_SOURCE_PATH. Each is deployed
-# to .github/workflows/ under its file name.
+# Expected files are file names in WORKFLOW_SOURCE_PATH. Each is deployed
+# to .github/workflows/ under the same name.
 DEFAULT_BRANCH_FILES = [
-    "debusine/debusine-daily.yml",
-    "debusine/debusine-pr-check.yml",
-    "debusine/debusine-pr-hook.yml",
-    "debusine/debusine-release.yml",
-    "debusine/README.debusine.md",
-    "qli-ci/pkg-build.yml",
-    "qli-ci/pkg-pr-hook.yml",
-    "qli-ci/pkg-promote-prebuilt.yml",
-    "qli-ci/pkg-promote.yml",
-    "qli-ci/pkg-release.yml",
+    "debusine-daily.yml",
+    "debusine-pr-check.yml",
+    "debusine-pr-hook.yml",
+    "debusine-release.yml",
+    "README.debusine.md",
+    "pkg-build.yml",
+    "pkg-pr-hook.yml",
+    "pkg-promote-prebuilt.yml",
+    "pkg-promote.yml",
+    "pkg-release.yml",
 ]
 
 DEBIAN_PACKAGING_BRANCH_FILES = [
-    "debusine/debusine-pr-hook.yml",
-    "debusine/debusine-release.yml",
-    "debusine/README.debusine.md",
+    "debusine-pr-hook.yml",
+    "debusine-release.yml",
+    "README.debusine.md",
 ]
 
 UBUNTU_PACKAGING_BRANCH_FILES = [
-    "debian/pkg-pr-hook.yml",
+    "pkg-pr-hook.yml",
 ]
 
 # Obsolete files are file names in .github/workflows/ that must be absent.
@@ -216,7 +216,7 @@ def is_ubuntu_packaging_branch(branch: str) -> bool:
 
 
 def get_expected_files(branch: str) -> List[str]:
-    """Return the expected source paths, relative to WORKFLOW_SOURCE_PATH, for a branch."""
+    """Return the expected workflow file names for a branch."""
     if branch == "qli-ci":
         return DEFAULT_BRANCH_FILES
     if is_ubuntu_packaging_branch(branch):
@@ -248,13 +248,13 @@ def chore_branch_name(target_branch: str) -> str:
 
 
 def find_differing_files(pkg_workdir: Path, source_dir: Path, files: List[str]) -> List[str]:
-    """Return source paths of files that are missing or differ from source_dir."""
+    """Return names of files that are missing or differ from source_dir."""
     differing = []
-    for source_path in files:
-        dest = pkg_workdir / ".github" / "workflows" / Path(source_path).name
-        src = source_dir / source_path
+    for filename in files:
+        dest = pkg_workdir / ".github" / "workflows" / filename
+        src = source_dir / filename
         if not dest.exists() or dest.read_bytes() != src.read_bytes():
-            differing.append(source_path)
+            differing.append(filename)
     return differing
 
 
@@ -284,13 +284,13 @@ def remote_chore_branch_is_current(
         workflows_tree = pkg_repo.get(pkg_repo.get(github_entry.id)["workflows"].id)
     except KeyError:
         return False
-    for source_path in files:
+    for filename in files:
         try:
-            entry = workflows_tree[Path(source_path).name]
+            entry = workflows_tree[filename]
         except KeyError:
             return False
         blob = pkg_repo.get(entry.id)
-        expected = (source_dir / source_path).read_bytes()
+        expected = (source_dir / filename).read_bytes()
         if blob.data != expected:
             return False
     for filename in obsolete:
@@ -353,7 +353,7 @@ def process_branch(
 
     if dry_run:
         if differing:
-            names = ", ".join(Path(p).name for p in differing)
+            names = ", ".join(differing)
             print(f"❌ {target_branch}: would update: {names}")
         if to_remove:
             print(f"❌ {target_branch}: would remove: {', '.join(to_remove)}")
@@ -361,16 +361,16 @@ def process_branch(
     # Copy updated files into, and remove obsolete files from, the working tree
     workflows_dir = pkg_workdir / ".github" / "workflows"
     workflows_dir.mkdir(parents=True, exist_ok=True)
-    for source_path in differing:
-        shutil.copy2(source_dir / source_path, workflows_dir / Path(source_path).name)
+    for filename in differing:
+        shutil.copy2(source_dir / filename, workflows_dir / filename)
     for filename in to_remove:
         (workflows_dir / filename).unlink()
 
     # Commit
     index = pkg_repo.index
     index.read()
-    for source_path in differing:
-        index.add(f".github/workflows/{Path(source_path).name}")
+    for filename in differing:
+        index.add(f".github/workflows/{filename}")
     for filename in to_remove:
         index.remove(f".github/workflows/{filename}")
     index.write()

@@ -191,11 +191,12 @@ No environment secret is required in `Axiom` at this time.
 
 Workflow files must be present and be duplicates of the corresponding
 files that are in `pkg-workflows/` in the main branch of the
-qualcomm-linux/qli-ci repository as follows. Each file is listed by its
-path relative to `pkg-workflows/` and must be present in
-`.github/workflows/` under its file name (for example,
-`debusine/debusine-daily.yml` must be present as
-`.github/workflows/debusine-daily.yml`).
+qualcomm-linux/qli-ci repository as follows. `pkg-workflows/` is flat:
+each file listed below is present there under the same name, and must be
+present in `.github/workflows/` under that name (for example,
+`pkg-workflows/debusine-daily.yml` must be present as
+`.github/workflows/debusine-daily.yml`). A given file name therefore
+always has the same contents in every managed branch that has it.
 
 Workflow files that were deployed by earlier versions of this tooling,
 or by its predecessors, must not be present in `.github/workflows/`, as
@@ -218,18 +219,18 @@ Other files in `.github/workflows/` are not managed.
 The default branch must be named `qli-ci` and contain the following in
 `.github/workflows/`:
 
-| File                               |
-|------------------------------------|
-| `debusine/debusine-daily.yml`      |
-| `debusine/debusine-pr-check.yml`   |
-| `debusine/debusine-pr-hook.yml`    |
-| `debusine/debusine-release.yml`    |
-| `debusine/README.debusine.md`      |
-| `qli-ci/pkg-build.yml`             |
-| `qli-ci/pkg-pr-hook.yml`           |
-| `qli-ci/pkg-promote-prebuilt.yml`  |
-| `qli-ci/pkg-promote.yml`           |
-| `qli-ci/pkg-release.yml`           |
+| File                       |
+|----------------------------|
+| `debusine-daily.yml`       |
+| `debusine-pr-check.yml`    |
+| `debusine-pr-hook.yml`     |
+| `debusine-release.yml`     |
+| `README.debusine.md`       |
+| `pkg-build.yml`            |
+| `pkg-pr-hook.yml`          |
+| `pkg-promote-prebuilt.yml` |
+| `pkg-promote.yml`          |
+| `pkg-release.yml`          |
 
 Apart from the legacy files above, no files are required to be absent.
 
@@ -246,11 +247,11 @@ exist, but if they do, they must contain the following in
 - `qli-staging/debian/trixie`
 - `qli-staging/debian/latest`
 
-| File                            |
-|---------------------------------|
-| `debusine/debusine-pr-hook.yml` |
-| `debusine/debusine-release.yml` |
-| `debusine/README.debusine.md`   |
+| File                   |
+|------------------------|
+| `debusine-pr-hook.yml` |
+| `debusine-release.yml` |
+| `README.debusine.md`   |
 
 In addition to the legacy files above, the following must not be
 present in `.github/workflows/`:
@@ -272,9 +273,9 @@ contain `/`, is a managed Ubuntu packaging branch. Such branches do not
 need to exist, but if they do, they must contain the following in
 `.github/workflows/`:
 
-| File                     |
-|--------------------------|
-| `debian/pkg-pr-hook.yml` |
+| File              |
+|-------------------|
+| `pkg-pr-hook.yml` |
 
 In addition to the legacy files above, the following must not be
 present in `.github/workflows/`:
