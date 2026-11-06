@@ -208,6 +208,9 @@ decision to bring them back:
   `Dockerfiles/debusine-builder/`
 - copied legacy `scripts/ci/` Debusine helper trees
 - stale `*.old` workflow snapshots
+- a separate stub sync workflow such as `.github/workflows/workflows_sync.yml`;
+  `update-workflow-files` is the single tool that manages workflow stubs in
+  `pkg-*` repositories
 
 ## pkg-example End-to-End Test Suite
 
